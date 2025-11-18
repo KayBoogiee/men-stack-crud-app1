@@ -57,6 +57,9 @@ app.put('/recipes/:id', async (req, res) => {
   }
 });
 
+// ... all your CRUD routes above ...
+
+// DELETE route (this is the last CRUD route)
 app.delete('/recipes/:id', async (req, res) => {
   try {
     const deleted = await Recipe.findByIdAndDelete(req.params.id);
@@ -67,20 +70,35 @@ app.delete('/recipes/:id', async (req, res) => {
   }
 });
 
-// Root route
+// ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+// ←←← PASTE THE NEW ROOT ROUTE BLOCK RIGHT HERE ↓↓↓↓↓↓↓↓↓↓↓↓
+// ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+
 app.get('/', (req, res) => {
   res.send(`
-    <h1>MEN Stack Recipe CRUD App is LIVE! 🎉</h1>
-    <p>Use these endpoints:</p>
+    <h1>MEN Stack Recipe CRUD App is LIVE!</h1>
+    <p>API is working perfectly on Heroku!</p>
+    <h3>Available endpoints:</h3>
     <ul>
-      <li>GET /recipes</li>
-      <li>POST /recipes</li>
-      <li>PUT /recipes/:id</li>
-      <li>DELETE /recipes/:id</li>
+      <li>GET /recipes → List all recipes</li>
+      <li>POST /recipes → Create new recipe</li>
+      <li>PUT /recipes/:id → Update recipe</li>
+      <li>DELETE /recipes/:id → Delete recipe</li>
     </ul>
-    <p>Test with Postman or Thunder Client!</p>
+    <p><strong>Test with Postman or Thunder Client</strong></p>
+    <small>Deployed on: ${new Date().toLocaleString()}</small>
   `);
 });
+
+// This line stops the "Method Not Allowed" error forever
+app.all('/', (req, res) => {
+  if (req.method !== 'GET') {
+    res.status(405).send('Method Not Allowed – Only GET is allowed on the root page');
+  }
+});
+
+// ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+// ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
