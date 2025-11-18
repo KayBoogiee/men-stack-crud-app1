@@ -90,6 +90,13 @@ app.get('/', (req, res) => {
   `);
 });
 
+app.use('/', (req, res, next) => {
+  if (req.path === '/' && req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method Not Allowed — Only GET works on the homepage' });
+  }
+  next();
+});
+
 // This line stops the "Method Not Allowed" error forever
 app.all('/', (req, res) => {
   if (req.method !== 'GET') {
