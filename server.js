@@ -90,9 +90,9 @@ app.get('/', (req, res) => {
   `);
 });
 
-app.use('/', (req, res, next) => {
-  if (req.path === '/' && req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method Not Allowed — Only GET works on the homepage' });
+app.use((req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'POST' && req.method !== 'PUT' && req.method !== 'DELETE') {
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
   next();
 });
